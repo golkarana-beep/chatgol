@@ -118,6 +118,26 @@ html{color-scheme:dark}html[data-theme=light]{color-scheme:light}
 [data-theme=light] .row .ok{color:#fff}
 [data-theme=light] dialog::backdrop{background:rgba(60,30,90,.35)}
 [data-theme=light] .logo svg{filter:drop-shadow(0 0 8px rgba(224,69,127,.4))}
+
+html,body{height:100dvh}
+@media(max-width:760px){
+ aside{position:fixed;top:0;bottom:0;right:0;left:auto;width:84%;max-width:320px;transform:translateX(100%);z-index:30;padding-top:calc(14px + env(safe-area-inset-top,0px));box-shadow:-12px 0 40px rgba(0,0,0,.4)}
+ aside.open{transform:none}
+ html[data-theme] aside{background:var(--surface)}
+ .menu{display:block;top:8px}
+ .theme{top:8px}
+ header{padding:10px 54px}
+ .logo{font-size:21px}.logo svg{width:32px;height:32px}
+ .by{font-size:11px}
+ .m{max-width:94%}
+ #msgs{padding:16px 10px}
+ .item .del{opacity:1}
+ textarea,.prov input{font-size:16px}
+ .modes{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.modes button{white-space:nowrap}
+ header,.m.ai,.box{backdrop-filter:none;-webkit-backdrop-filter:none}
+ dialog.big{width:100vw;height:100dvh;max-width:100vw;max-height:100dvh;border-radius:0}
+ dialog{max-height:92dvh}
+}
 </style>
 </head>
 <body>
@@ -296,7 +316,7 @@ $('#wrap').addEventListener('click',e=>{
 (()=>{
 const cv=$('#bg'),x=cv.getContext('2d');let W,H,D,t=0;
 const L=[{c:'255,107,157',a:.5,f:.0014,s:.55,h:.58,p:0,m:.11},{c:'176,76,255',a:.45,f:.0019,s:.4,h:.5,p:2,m:.09},{c:'255,200,87',a:.28,f:.0011,s:.7,h:.68,p:4,m:.13},{c:'122,224,176',a:.22,f:.0024,s:.3,h:.44,p:1,m:.07}];
-function rs(){D=Math.min(devicePixelRatio||1,1.5);W=cv.width=innerWidth*D;H=cv.height=innerHeight*D}
+function rs(){D=Math.min(devicePixelRatio||1,innerWidth<760?1:1.5);W=cv.width=innerWidth*D;H=cv.height=innerHeight*D}
 function draw(){
   x.clearRect(0,0,W,H);const am=document.documentElement.dataset.theme==='light'?.6:1;
   for(const l of L){for(let k=0;k<4;k++){
@@ -337,6 +357,7 @@ $('#send').onclick=send;
 $('#inp').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
 $('#inp').addEventListener('input',e=>{e.target.style.height='auto';e.target.style.height=e.target.scrollHeight+'px'});
 $('#newBtn').onclick=newChat;
+document.addEventListener('click',e=>{const sd=$('#side');if(sd.classList.contains('open')&&!sd.contains(e.target)&&e.target!==$('#menu'))sd.classList.remove('open')});
 $('#menu').onclick=()=>$('#side').classList.toggle('open');
 $('#setBtn').onclick=()=>{
   $('#provs').innerHTML=PROVS.map((p,i)=>{const k=cfgOf(p);
